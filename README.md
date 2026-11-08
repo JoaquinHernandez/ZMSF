@@ -1,4 +1,4 @@
-# ZMS
+
 **Zero Meaning Security Framework (ZMSF)**
 # Zero Meaning Security Framework (ZMSF)
 **Breach-Resistant Security Architecture for Financial Services and Critical Infrastructure**
