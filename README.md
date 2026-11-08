@@ -1,9 +1,9 @@
 
-**Zero Meaning Security Framework (ZMSF)**
+**Zero Meaning Security Framework (ZMSF)“Assume Compromise. Protect Meaning.”**
 # Zero Meaning Security Framework (ZMSF)
 **Breach-Resistant Security Architecture for Financial Services and Critical Infrastructure**
 **Version 3.0 | Executive Review Draft**
-“Assume Compromise. Protect Meaning.”
+
 <img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/cca08cd6-0648-4d07-ae1b-7ec49b02fcb9" />
 
 ## Executive Summary
