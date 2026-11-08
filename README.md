@@ -5,7 +5,7 @@
 **Version 3.0 | Executive Review Draft**
 <img width="1024" height="572" alt="image" src="https://github.com/user-attachments/assets/cca08cd6-0648-4d07-ae1b-7ec49b02fcb9" />
 
-
+## Executive Summary
 ## Executive Decision Statement
 Most security programs focus on a perimeter-centric question: *"How do we stop attackers from stealing the data?"* 
 
@@ -165,4 +165,4 @@ The attacker successfully stole the database, but stole zero meaning.
 **Formal Architecture Document v1.0**  
 *“Assume Compromise. Protect Meaning.”*
 
-## Executive Summary
+
