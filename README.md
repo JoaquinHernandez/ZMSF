@@ -93,3 +93,76 @@ The wrapped_key is locked and can only be opened by the external Hardware Securi
 The HSM will refuse to open the key for the attacker because the attacker does not have the verified Identity, Device Trust, and Session tokens required by the API gateway.
 
 The attacker successfully stole the database, but stole zero meaning.
+
+# Zero Meaning Security Framework (ZMSF)
+**Formal Architecture Document v1.0**  
+*“Assume Compromise. Protect Meaning.”*
+
+## Executive Summary
+Most security programs focus on a perimeter-centric question: *"How do we stop attackers from stealing the data?"* 
+
+The Zero Meaning Security Framework (ZMSF) shifts the paradigm to ask: *"What happens if they steal the data anyway?"*
+
+If traditional security is building a stronger bank vault door, ZMSF is building a stronger vault door, but ensuring that if an attacker breaches it, all they find are locked boxes requiring multiple independent, distributed keys.
+
+**In simple terms:** If an attacker steals the database, backups, source code, cloud storage, or an administrator's laptop, they should be fundamentally unable to understand the customer information. They should only receive **encrypted, meaningless data** (cryptographic noise) instead of names, SSNs, credit cards, or PII.
+
+## Why ZMSF Exists
+Current breaches typically result in databases being stolen and millions of plaintext records being exposed via cloud misconfigurations, SQL injections, compromised admins, insider threats, or supply chain attacks. ZMSF changes the outcome: stolen data remains mathematically useless to the attacker.
+
+## Core ZMSF Principles
+
+### Principle 1: Assume Breach
+Never assume "we are secure." Assume that one day, your database will be stolen, source code leaked, cloud account compromised, or a developer infected. Design the architecture so the data remains unreadable even in these scenarios.
+
+### Principle 2: Protect Meaning
+Instead of storing traditional human-readable JSON payloads, store cryptographic noise.
+* **Attacker sees:** Random cryptographic noise (`ciphertext`, `wrappedKey`, `version`).
+* **Attacker does NOT see:** Human-readable information.
+
+### Principle 3: Separate Trust Boundaries
+In traditional applications, the app, database, and encryption keys live together—compromising one server exposes everything. 
+ZMSF enforces strict separation: Database, Application, User Secrets, Device Secrets, HSM Secrets, and Identity Systems are entirely isolated. An attacker needs all parts simultaneously to reconstruct the data.
+
+### Principle 4: Minimize Plaintext
+* **Bad:** Decrypt a record, store it in memory, and leave it visible indefinitely.
+* **Good:** Decrypt, display temporarily, and dynamically destroy.
+* **Example:** Reveal an SSN for 5 seconds, automatically hide it, and clear the memory.
+
+### Principle 5: Continuous Trust Verification
+Replace "login once and trust forever" with continuous validation. Check the device, user, location, risk, session, and security posture on **every single transaction**.
+
+---
+
+## 7-Layer Formal Reference Architecture
+
+| Layer | Purpose | Key Technologies & Requirements |
+| :--- | :--- | :--- |
+| **Layer 1: User Access** | Verify Identity | Entra ID, FIDO2, Passkeys, YubiKey. Requires MFA, Device Trust, Conditional Access. |
+| **Layer 2: Endpoint Trust** | Verify Device Health | BitLocker, EDR (Defender XDR, Falcon, SentinelOne), TPM. Must be a managed, patched device. |
+| **Layer 3: Browser Security** | Prevent Client-Side Attacks | CSP, HSTS, Trusted Types, Secure/HttpOnly/SameSite=Strict Cookies. |
+| **Layer 4: API Gateway** | Control Every Request | Apigee, Azure API Mgmt, NGINX. Handles AuthN/AuthZ, rate limiting, and request validation. |
+| **Layer 5: Application** | Execute Business Logic | Application must **never** hold long-lived master keys. |
+| **Layer 6: Encrypted Storage**| Store Ciphertext Only | MongoDB, PostgreSQL, Cosmos DB. Plaintext PII/SSN is never written to disk. |
+| **Layer 7: Key Protection** | Hardware-Backed Secrecy| Azure Managed HSM, AWS CloudHSM, Thales. Keys never leave the hardware. |
+
+---
+
+## Endpoint Security Architecture & Data Handling
+
+### Secure Viewing (Just-in-Time Decryption)
+1. **User Action:** Hold to Reveal.
+2. **Display:** Data is rendered in plaintext for 5 seconds.
+3. **Execution:** Data is automatically hidden.
+
+### Clipboard Protection
+* **Control:** Auto-clear clipboard in 15 seconds to defeat malware monitoring the clipboard.
+
+### Session Binding
+* Bind sessions directly to Device Certificates, TPM, Passkeys, or Browser Keys. 
+* **Result:** A stolen cookie becomes entirely useless on a different machine.
+
+---
+
+## Final Vision Statement
+Only an authenticated user, on a trusted device, with proper authorization, risk validation, and time-limited access can temporarily convert protected data into human-readable information. That is the fundamental shift from **breach-prevention** to **breach-resistant architecture**.
